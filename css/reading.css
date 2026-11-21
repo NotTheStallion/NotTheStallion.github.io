@@ -1,0 +1,161 @@
+/* reading.css — Reading shelves (ticket 02). Rendered by js/reading.js into #reading-root. */
+
+#reading-root { margin-top: 40px; min-width: 0; }
+
+/* ---------- tabs ---------- */
+
+.rd-tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid var(--line-2);
+  margin-bottom: 34px;
+}
+.rd-tab {
+  position: relative;
+  padding: 12px 18px;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mute);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color .3s;
+}
+.rd-tab:hover { color: var(--text); }
+.rd-tab[aria-selected="true"] { color: var(--fg); }
+.rd-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--gold);
+}
+.rd-tab:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: -2px; }
+.rd-count {
+  margin-left: 8px;
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--gold);
+  vertical-align: super;
+}
+
+.rd-panel:focus-visible { outline: 1px dashed var(--gold-lo); outline-offset: 8px; }
+
+/* ---------- cover grid ---------- */
+
+.rd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 34px 26px;
+  padding: 6px 0 16px;
+}
+.rd-card {
+  min-width: 0;
+  perspective: 800px;
+  animation: rd-pop .6s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
+}
+@keyframes rd-pop { from { opacity: 0; transform: translateY(24px); } }
+
+/* Cover box; position: relative so a corner badge can sit on it later. */
+.rd-cv {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  background: var(--cover-bg);
+  box-shadow: 0 10px 24px var(--shadow);
+  transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+}
+.rd-cover { width: 100%; height: 100%; object-fit: cover; }
+.rd-notes { position: absolute; top: 8px; right: 8px; z-index: 1; }
+
+/* Missing cover: a lettered stand-in. */
+.rd-ph {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  text-align: center;
+  border: 1px solid var(--gold-lo);
+  background: linear-gradient(160deg, var(--cover-bg), var(--cover-bg-2));
+}
+.rd-ph b {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.15;
+  color: var(--gold);
+  overflow-wrap: anywhere;
+}
+.rd-ph span { font-size: 11px; color: var(--mute); }
+
+.rd-title {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-top: 12px;
+  color: var(--fg);
+}
+.rd-author { font-size: 13px; color: var(--mute); margin-top: 4px; }
+.rd-take { font-size: 13px; color: var(--gold-hi); margin-top: 6px; }
+.rd-take::before { content: "“"; }
+.rd-take::after { content: "”"; }
+
+/* 3D tilt: fine pointers only (js adds .rd-tilt unless touch or reduced motion). */
+@media (hover: hover) and (pointer: fine) {
+  .rd-tilt .rd-card:hover .rd-cv {
+    transform: rotateY(-14deg) translateY(-8px);
+    box-shadow: 14px 20px 40px var(--shadow-strong);
+  }
+}
+
+/* ---------- empty shelf ---------- */
+
+.rd-empty {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  max-width: 640px;
+  padding: 30px;
+  border: 1px dashed var(--gold-lo);
+  background: rgba(var(--bg-rgb), var(--surface-a));
+  color: var(--text-dim);
+}
+/* A small gold diamond in place of an icon. */
+.rd-mark { flex: none; width: 14px; height: 14px; margin: 0 8px; border: 1px solid var(--gold); transform: rotate(45deg); }
+.rd-empty p { font-family: var(--font-serif); font-size: 24px; line-height: 1.25; color: var(--fg); }
+.rd-empty em { font-style: italic; color: var(--gold-hi); }
+
+.rd-credit { margin-top: 26px; font-size: 11px; letter-spacing: .1em; color: var(--mute); }
+.rd-credit a { color: var(--mute); }
+.rd-credit a:hover { color: var(--gold-hi); }
+.rd-error { color: var(--mute); }
+
+/* ---------- phones ---------- */
+
+@media (max-width: 600px) {
+  .scene.reading { padding-left: 16px; padding-right: 16px; }
+  .rd-tabs {
+    flex-wrap: nowrap;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rd-tabs::-webkit-scrollbar { display: none; }
+  .rd-tab { flex: none; white-space: nowrap; padding: 12px; font-size: 11px; letter-spacing: .12em; }
+  .rd-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+  .rd-title { font-size: 18px; }
+  .rd-empty { gap: 16px; padding: 20px; }
+  .rd-mark { margin: 0 4px; }
+  .rd-empty p { font-size: 20px; }
+}

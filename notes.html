@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+  Notes reader (ticket 05). Calm companion to index.html: same palette, light/dark
+  theme and fonts (css/base.css, js/theme.js), no video, no scroll effects.
+
+    notes.html                → notes index
+    notes.html?r=<id>         → one Resource's chapters
+    notes.html?r=<id>&c=<nn>  → one Note (notes/<id>/<nn>-<slug>.md)
+
+  Logic: js/notes.js. Styles: css/notes.css. Notes are listed in notes/index.json.
+  KaTeX needs the HTML5 doctype (standards mode).
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes · The Stallion</title>
+  <meta name="description" content="Chapter notes on maths and AI books and courses, with formulas and derivations. Free to reuse under CC BY 4.0.">
+  <meta name="theme-color" content="#0b0b0b">
+  <meta property="og:title" content="Notes · The Stallion">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://notthestallion.github.io/assets/images/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/images/horse_nbg.png" type="image/png">
+  <script>
+    // Theme: apply a stored light/dark choice before first paint, so there is no
+    // flash. No choice: CSS follows prefers-color-scheme. Toggle: js/theme.js.
+    (function () { try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {} })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@300;400;600&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/notes.css">
+  <script type="module" src="js/theme.js"></script>
+  <script type="module" src="js/notes.js"></script>
+</head>
+<body class="notes-page">
+
+<a class="nt-skip" href="#nt-main">Skip to content</a>
+
+<header class="nt-top">
+  <a class="nt-brand" href="index.html" aria-label="Back to The Stallion">
+    <img src="assets/images/horse_nbg.png" alt="" width="28" height="28">
+    <span>← The Stallion</span>
+  </a>
+  <a class="nt-home" href="notes.html">Notes</a>
+  <button class="nt-chapters-btn" id="nt-chapters-btn" type="button" aria-expanded="false" aria-controls="nt-sidebar" hidden>
+    <span aria-hidden="true">☰</span> Chapters
+  </button>
+  <button class="theme-toggle" type="button" aria-label="Light theme" aria-pressed="false">
+    <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+    <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+  </button>
+</header>
+
+<div class="nt-layout">
+  <nav class="nt-sidebar" id="nt-sidebar" aria-label="Chapters" hidden>
+    <div class="nt-side-head">
+      <span class="nt-side-label">Chapters</span>
+      <button class="nt-side-close" type="button" aria-label="Close chapters">✕</button>
+    </div>
+    <div class="nt-side-body"></div>
+  </nav>
+  <main class="nt-main" id="nt-main" tabindex="-1">
+    <p class="nt-loading">Loading…</p>
+    <noscript><p>The notes are rendered with JavaScript. The raw Markdown lives in the <a href="https://github.com/NotTheStallion/NotTheStallion.github.io/tree/master/notes">notes folder</a>.</p></noscript>
+  </main>
+</div>
+<div class="nt-scrim" id="nt-scrim" hidden></div>
+
+<footer class="nt-footer">
+  <p><a href="index.html">The Stallion</a> · <a href="notes.html">All notes</a> · Notes licensed <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a></p>
+</footer>
+
+</body>
+</html>

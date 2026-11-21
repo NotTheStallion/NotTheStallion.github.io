@@ -1,0 +1,31 @@
+{
+  "topics": [
+    { "name": "GPU cluster infrastructure", "status": "deep",
+      "why": "The whole stack, from the rack and its management controllers up to the workload, so I can place any fault on a layer.",
+      "resources": [
+        { "name": "NVIDIA DGX GB200 user guide: hardware", "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html" },
+        { "name": "NVIDIA Fabric Manager user guide", "url": "https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide/index.html" },
+        { "name": "DMTF Redfish schemas", "url": "https://redfish.dmtf.org/schemas/v1/" }
+      ] },
+    { "name": "Networking and storage for AI", "status": "deep",
+      "why": "How GPU nodes move and read data fast enough to stay busy: RDMA fabrics and parallel filesystems, measured, not assumed.",
+      "resources": [
+        { "name": "linux-rdma/perftest", "url": "https://github.com/linux-rdma/perftest" },
+        { "name": "Parallel filesystem architecture overview", "url": "https://docs.weka.io/4.4/weka-system-overview/about" }
+      ] },
+    { "name": "Agent runtime infrastructure", "status": "started",
+      "why": "Judging the claims about agent harnesses and sandboxes myself.",
+      "resources": [ { "name": "Anthropic: managed agents", "url": "https://www.anthropic.com/engineering/managed-agents" } ] }
+  ],
+  "learned": [],
+  "radar": [
+    { "topic": "CUDA and GPU architecture", "hook": "Why kernels are memory-bound or compute-bound.",
+      "links": ["https://docs.nvidia.com/cuda/cuda-programming-guide/"] },
+    { "topic": "NCCL internals", "hook": "How a collective becomes traffic, and why all-reduce misses its number.",
+      "links": ["https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/index.html"] },
+    { "topic": "LLM inference serving", "hook": "KV cache, continuous batching, prefill/decode split.",
+      "links": ["https://github.com/sgl-project/sglang", "https://github.com/NVIDIA/TensorRT-LLM"] },
+    { "topic": "Kubernetes for GPU workloads", "hook": "How a GPU actually reaches a container.",
+      "links": ["https://github.com/NVIDIA/k8s-device-plugin"] }
+  ]
+}

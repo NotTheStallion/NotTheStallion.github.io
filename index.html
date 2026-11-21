@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--
+  The Stallion: one-page site. Plain HTML/CSS/JS, no build step.
+
+  Layout: opening, About, Tech, Currently learning, Reading,
+  Swimming band ("Off the clock"), footer.
+
+  Section modules (each owns its own JS + CSS and renders into one mount element):
+    Tech workbench      #workbench-root     js/workbench.js   css/workbench.css
+    Currently learning  #learning-root      js/learning.js    css/learning.css
+    Reading shelves     #reading-root       js/reading.js     css/reading.css
+    Footer "Notes" link #footer-notes-slot  → notes.html (notes reader: js/notes.js, css/notes.css)
+  Light/dark theme: tokens in css/base.css, toggle in js/theme.js (+ the inline
+  <head> script below that applies a stored choice before first paint).
+  Shared motion/video helpers live in js/shared.js (see the comment at its top);
+  js/main.js wires the page-wide motion. Feature modules should not edit main.js.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Stallion</title>
+  <meta name="description" content="Engineer by trade, builder by reflex, Tony Stark by aspiration (minus the billions).">
+  <meta name="theme-color" content="#0b0b0b">
+  <meta property="og:title" content="The Stallion">
+  <meta property="og:description" content="Engineer by trade, builder by reflex, Tony Stark by aspiration (minus the billions).">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://notthestallion.github.io/">
+  <meta property="og:image" content="https://notthestallion.github.io/assets/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Stallion: gold horse logo above the name">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://notthestallion.github.io/">
+  <link rel="icon" href="assets/images/horse_nbg.png" type="image/png">
+  <script>
+    // Theme: apply a stored light/dark choice before first paint, so there is no
+    // flash. No choice: CSS follows prefers-color-scheme. Toggle: js/theme.js.
+    (function () { try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {} })();
+  </script>
+  <script>
+    // `.js` hides .rv content until it scrolls in (no flash). Fail-safe: module
+    // scripts run before DOMContentLoaded, so if js/main.js has not wired reveal()
+    // by then (modules unsupported, failed to load, threw early), show everything.
+    document.documentElement.classList.add('js');
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!document.documentElement.hasAttribute('data-reveal')) document.documentElement.classList.remove('js');
+    });
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@300;400;600&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/workbench.css">
+  <link rel="stylesheet" href="css/learning.css">
+  <link rel="stylesheet" href="css/reading.css">
+  <script type="module" src="js/theme.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/workbench.js"></script>
+  <script type="module" src="js/learning.js"></script>
+  <script type="module" src="js/reading.js"></script>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<button class="theme-toggle" type="button" aria-label="Light theme" aria-pressed="false">
+  <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+  <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+</button>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<nav class="dots" id="dots" aria-label="Sections">
+  <a href="#about"><span>About</span><i></i></a>
+  <a href="#tech"><span>Tech</span><i></i></a>
+  <a href="#learning"><span>Learning</span><i></i></a>
+  <a href="#reading"><span>Reading</span><i></i></a>
+  <a href="#swimming"><span>Swimming</span><i></i></a>
+</nav>
+
+<header class="scene opening" id="top">
+  <div class="in" id="opening-in">
+    <img class="logo" src="assets/images/horse_nbg.png" alt="" width="220" height="220">
+    <h1 class="title" id="title">The Stallion</h1>
+    <p class="tagline"><span class="half"><span>Engineer by trade,</span> <span>builder by reflex,</span></span> <br class="tagline-br"><span class="half"><span>Tony Stark by aspiration</span> <span>(minus the billions)</span></span></p>
+    <a class="scroll-cue" href="#about">↓ scroll</a>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marquee"><span class="marquee-group"><span>Curious</span><b>✦</b><span>Builds</span><b>✦</b><span>Learns</span><b>✦</b><span>Reads</span><b>✦</b></span></div>
+</div>
+
+<main>
+
+<section class="about" id="about" aria-labelledby="about-label">
+  <h2 class="label rv" id="about-label">00 — About</h2>
+  <p class="lead" id="lead">I'm an engineer from one of France's top engineering schools. I fell for <em>AI</em> and <em>mathematics</em> early enough to do research as a student: internships at a national <em>research lab</em>, a co-authored paper, findings in <em>RLHF</em>. Now I work on <em>GPUs</em> at an international datacenter company, learning the <em>full stack</em>, from the hardware up to the software. It's a rare range of skills, and I think it may be the most valuable one in the years ahead. Outside work, same habit: learn something hard, then build something with it.</p>
+  <ul class="facts">
+    <li class="rv"><small>Trained</small><b>Engineering</b><span>Top engineering school, France</span></li>
+    <li class="rv" style="--d:.1s"><small>Focus</small><b>AI · Math</b><span>Since the student years</span></li>
+    <li class="rv" style="--d:.2s"><small>Research</small><b>RLHF</b><span>Co-authored paper</span></li>
+    <li class="rv" style="--d:.3s"><small>Now</small><b>GPUs, full stack</b><span>From hardware to software</span></li>
+  </ul>
+</section>
+
+<div class="rule rv" aria-hidden="true"></div>
+
+<section class="scene" id="tech" aria-labelledby="tech-title">
+  <video class="bg" data-video="gpu-3" poster="assets/video/gpu-3-phone.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="in">
+    <div class="label rv">01 — Tech</div>
+    <h2 class="drift" data-drift="-1" id="tech-title"><span class="fill">Tech</span> Tech Tech</h2>
+    <p class="txt rv">What I build when nobody's asking: models rebuilt from scratch to see how they really work, and tools other engineers actually use.</p>
+    <div id="workbench-root"></div>
+    <ul class="interests rv" aria-label="Interests">
+      <li>LLMs from scratch</li>
+      <li>Preference tuning (RLHF / DPO)</li>
+      <li>Distributed training</li>
+      <li>GPUs &amp; performance</li>
+      <li>RAG &amp; evaluation</li>
+    </ul>
+  </div>
+</section>
+
+<section class="scene learning" id="learning" aria-labelledby="learning-title">
+  <div class="in">
+    <div class="label rv">02 — Currently learning</div>
+    <h2 class="drift" data-drift="1" id="learning-title">Currently <span class="fill">Learning</span></h2>
+    <p class="txt rv">What I'm studying now, and what I'm reading about on the side.</p>
+    <div id="learning-root"></div>
+  </div>
+</section>
+
+<section class="scene reading" id="reading" aria-labelledby="reading-title">
+  <video class="bg" data-video="read" poster="assets/video/read-phone.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="in">
+    <div class="label rv">03 — Reading</div>
+    <h2 class="drift" data-drift="-1" id="reading-title"><span class="fill">Reading</span> Read</h2>
+    <p class="txt rv">Heavy on maths, with some business for balance.</p>
+    <div id="reading-root"></div>
+  </div>
+</section>
+
+<section class="band" id="swimming" aria-labelledby="swimming-title">
+  <video class="band-video" data-video="swim-1" poster="assets/video/swim-1-phone.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="in rv">
+    <div class="label">Off the clock</div>
+    <h2 id="swimming-title">Swim<span>ming</span></h2>
+    <p>My one hour a day with no notifications.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <img src="assets/images/horse_nbg.png" alt="" width="40" height="40">
+  <p class="links">The Stallion · <a href="https://github.com/NotTheStallion" rel="me">GitHub</a> · <a href="https://x.com/NotStallion" rel="me">X</a> · <a href="mailto:NotTheStallion[at]gmail[dot]com">Email</a><span id="footer-notes-slot"> · <a href="notes.html">Notes</a></span></p>
+  <p class="credits">Notes licensed CC BY 4.0 · Video: Pexels · Covers: Open Library</p>
+</footer>
+
+</body>
+</html>

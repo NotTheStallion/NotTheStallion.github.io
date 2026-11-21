@@ -1,0 +1,338 @@
+/*
+ * notes.css — the notes reader (notes.html). Calm: the main page's palette and
+ * fonts (css/base.css tokens), a comfortable column, no motion.
+ *
+ * Desktop: chapter sidebar on the left. Phones (≤860px): the sidebar becomes a
+ * drawer that slides in from the left, opened by the "Chapters" button.
+ */
+
+.notes-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+}
+
+.nt-skip {
+  position: absolute;
+  left: 8px;
+  top: -40px;
+  z-index: 100;
+  padding: 6px 12px;
+  background: var(--gold);
+  color: var(--on-gold);
+}
+.nt-skip:focus { top: 8px; }
+
+/* ---------- top bar ---------- */
+
+.nt-top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px var(--nt-gutter, 28px);
+  background: rgba(var(--bg-rgb), .92);
+  border-bottom: 1px solid var(--line);
+}
+.nt-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+}
+.nt-brand:hover { color: var(--gold-hi); }
+.nt-home {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: .08em;
+  color: var(--gold-hi);
+  text-decoration: none;
+}
+.nt-chapters-btn {
+  margin-left: auto;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid rgba(var(--gold-rgb), .5);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--gold-hi);
+  font: 400 13px var(--font-body);
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+/* Theme toggle sits at the right end of the sticky bar here, not fixed. */
+.nt-top .theme-toggle { position: static; flex: none; margin-left: auto; }
+.nt-chapters-btn:focus-visible, .nt-side-close:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+
+/* ---------- layout ---------- */
+
+.nt-layout {
+  flex: 1;
+  display: flex;
+  gap: 56px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px var(--nt-gutter, 28px) 80px;
+}
+.nt-main { flex: 1; min-width: 0; max-width: 72ch; outline: none; }
+.nt-loading { color: var(--mute); }
+
+/* ---------- sidebar ---------- */
+
+.nt-sidebar {
+  flex: 0 0 240px;
+  align-self: flex-start;
+  position: sticky;
+  top: 84px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  font-size: 14px;
+}
+.nt-sidebar[hidden] { display: none; }
+.nt-side-head { display: none; }
+.nt-side-res { margin-bottom: 14px; }
+.nt-side-res a {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--fg);
+  text-decoration: none;
+}
+.nt-side-list { list-style: none; border-left: 1px solid var(--line); }
+.nt-side-list a {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0 6px 14px;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+.nt-side-list a:hover { color: var(--gold-hi); }
+.nt-side-list a[aria-current="page"] { color: var(--gold-hi); border-left-color: var(--gold); }
+.nt-side-all { margin-top: 18px; }
+.nt-side-all a { color: var(--mute); text-decoration: none; font-size: 13px; }
+.nt-side-all a:hover { color: var(--gold-hi); }
+
+.nt-toc-n { color: var(--gold); font-variant-numeric: tabular-nums; }
+
+/* ---------- index ---------- */
+
+.nt-label {
+  font-size: 12px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.nt-label a { color: inherit; text-decoration: none; }
+.nt-label a:hover { color: var(--gold-hi); }
+.nt-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(56px, 10vw, 104px);
+  line-height: .95;
+  color: var(--fg);
+  margin: 10px 0 16px;
+}
+.nt-lead { font-size: 17px; max-width: 56ch; color: var(--text); }
+.nt-empty, .nt-problem p { color: var(--text-dim); margin-top: 16px; }
+
+.nt-res { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
+.nt-kind { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--mute); }
+.nt-res-title { font-family: var(--font-serif); font-weight: 500; font-size: 30px; line-height: 1.2; margin-top: 6px; }
+h1.nt-res-title { font-size: clamp(34px, 6vw, 48px); }
+.nt-res-title a { color: var(--fg); text-decoration: none; }
+.nt-res-title a:hover { color: var(--gold-hi); }
+.nt-res-by { color: var(--mute); font-size: 14px; margin-top: 4px; }
+.nt-toc { list-style: none; margin-top: 18px; }
+.nt-toc a {
+  display: flex;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 17px;
+}
+.nt-toc a:hover .nt-toc-t { color: var(--gold-hi); }
+
+/* ---------- a note ---------- */
+
+.nt-body {
+  margin-top: 8px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-wrap: break-word;
+}
+.nt-body h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(48px, 8vw, 84px);
+  line-height: .95;
+  color: var(--fg);
+  margin: 8px 0 28px;
+}
+.nt-body h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1.2;
+  color: var(--gold-hi);
+  margin: 48px 0 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 80px;
+}
+.nt-body h3 { font-weight: 600; font-size: 18px; color: var(--fg); margin: 28px 0 10px; scroll-margin-top: 80px; }
+.nt-body p, .nt-body ul, .nt-body ol, .nt-body blockquote, .nt-body pre, .nt-body table { margin: 0 0 18px; }
+.nt-body ul, .nt-body ol { padding-left: 1.4em; }
+.nt-body ul { list-style: disc; }
+.nt-body li { margin-bottom: 8px; }
+.nt-body li::marker { color: var(--gold); }
+.nt-body strong { font-weight: 600; color: var(--fg); }
+.nt-body blockquote { padding-left: 16px; border-left: 2px solid var(--gold-lo); color: var(--text-dim); font-style: italic; }
+.nt-body code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .88em; background: var(--bg-raise); padding: .1em .35em; border-radius: 3px; }
+.nt-body pre { background: var(--bg-raise); padding: 14px 16px; border-radius: 4px; overflow-x: auto; }
+.nt-body pre code { padding: 0; background: none; }
+.nt-body hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+.nt-body img { max-width: 100%; height: auto; }
+.nt-body table { display: block; overflow-x: auto; border-collapse: collapse; }
+.nt-body th, .nt-body td { border: 1px solid var(--line); padding: 6px 10px; }
+
+/* KaTeX inherits the text colour. Wide display maths scrolls in its own box. */
+.nt-body .katex { font-size: 1.08em; }
+.math-display {
+  margin: 0 0 20px;
+  padding: 6px 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+.math-display .katex-display { margin: 0; }
+.math-display:focus-visible { outline: 1px solid var(--gold-lo); outline-offset: 2px; }
+
+/* ← previous / next → */
+.nt-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.nt-pager a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  text-decoration: none;
+}
+.nt-pager a:hover { border-color: var(--gold-lo); color: var(--gold-hi); }
+.nt-pager small { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.nt-pager-next { text-align: right; grid-column: 2; }
+
+.nt-licence {
+  margin-top: 32px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+/* ---------- footer ---------- */
+
+.nt-footer {
+  padding: 28px var(--nt-gutter, 28px) 40px;
+  border-top: 1px solid var(--line-soft);
+  text-align: center;
+  color: var(--mute);
+  font-size: 13px;
+}
+
+/* ---------- phones: chapters drawer ---------- */
+
+.nt-scrim[hidden] { display: none; }
+
+@media (max-width: 860px) {
+  .notes-page { --nt-gutter: 16px; }
+  .nt-layout { display: block; padding-top: 28px; }
+  .nt-has-sidebar .nt-chapters-btn:not([hidden]) { display: inline-flex; }
+  .nt-has-sidebar .nt-chapters-btn:not([hidden]) + .theme-toggle { margin-left: 0; }
+  .nt-brand span { display: none; }
+
+  .nt-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 60;
+    width: min(84vw, 320px);
+    max-height: none;
+    align-self: stretch; /* box alignment applies to fixed boxes too */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 16px 20px 32px;
+    background: var(--bg-raise);
+    border-right: 1px solid var(--line);
+    box-shadow: 12px 0 40px var(--shadow-strong);
+    transform: translateX(-105%);
+    visibility: hidden;
+    transition: transform .3s var(--ease), visibility 0s linear .3s;
+  }
+  .nt-sidebar.is-open {
+    transform: none;
+    visibility: visible;
+    transition: transform .3s var(--ease), visibility 0s;
+  }
+  .nt-side-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .nt-side-label { font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+  .nt-side-close {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text);
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .nt-side-list a { padding-top: 10px; padding-bottom: 10px; }
+
+  .nt-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--scrim-dim);
+  }
+  .nt-drawer-open { overflow: hidden; }
+
+  .nt-body { font-size: 16px; }
+  .nt-body h2 { font-size: 26px; }
+  .nt-pager { grid-template-columns: 1fr; }
+  .nt-pager-next { grid-column: 1; }
+}
+
+/* ---------- print: black on white, maths whole ---------- */
+
+@media print {
+  .nt-top, .nt-sidebar, .nt-pager, .nt-footer, .nt-scrim, .nt-skip { display: none !important; }
+  body, .nt-body, .nt-body h1, .nt-body h2, .nt-body strong { background: #fff; color: #000; }
+  .nt-layout { padding: 0; }
+  .math-display { overflow: visible; break-inside: avoid; }
+  .nt-body h2, .nt-body h3 { break-after: avoid; }
+}

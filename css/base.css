@@ -1,0 +1,424 @@
+/*
+ * base.css — palette (light and dark themes), type, reset and the shared
+ * building blocks every section uses: scenes, labels, drifting titles,
+ * reveal-on-scroll, grain, progress bar, section dots and the theme toggle.
+ *
+ * Theming: every colour is a token below. Dark is the default. A visitor's
+ * explicit choice sets <html data-theme="light|dark"> (js/theme.js, plus a
+ * tiny inline script in each page's <head> so there is no flash); with no
+ * choice the page follows prefers-color-scheme.
+ */
+
+:root {
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-body: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --gutter: max(16px, 7vw);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+/* Dark (default). */
+:root, :root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b0b0b;
+  --bg-rgb: 11, 11, 11;          /* for translucent scrims and card surfaces */
+  --bg-raise: #141414;           /* code blocks, drawer */
+  --bg-band: #0e0d0a;            /* marquee strip */
+  --bg-hover: #15120a;
+  --cover-bg: #1a1a1a;
+  --cover-bg-2: #0d0d0d;
+  --fg: #f5f2ea;                 /* headings, strongest text */
+  --text: #e3ded2;
+  --text-dim: #cfcabf;
+  --mute: #9b968a;
+  --word-dim: #3a3832;           /* About intro words before they light up */
+  --line: #262626;
+  --line-2: #2a2a2a;             /* card borders */
+  --line-soft: #1d1d1d;
+  --gold: #c9a24a;
+  --gold-hi: #e8c873;            /* emphasis and links */
+  --gold-lo: #8a6a25;            /* decorative borders and strokes */
+  --gold-pale: #fff3cf;          /* top of the title gradient */
+  --gold-rgb: 201, 162, 74;
+  --on-gold: #0b0b0b;
+  --formula: rgba(245, 242, 234, .15);
+  --formula-gold: rgba(232, 200, 115, .22);
+  --shadow: rgba(0, 0, 0, .45);
+  --shadow-strong: rgba(0, 0, 0, .6);
+  --scrim-dim: rgba(0, 0, 0, .55);    /* behind the notes drawer */
+  --scrim-top: .35;              /* video scene overlay opacities */
+  --scrim-mid: .5;
+  --surface-a: .72;              /* card surface opacity over video */
+  --band-video-opacity: .6;
+  --band-mid: .6;
+}
+
+/* Light ("white") theme: off-white paper, near-black ink, deeper gold for contrast. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fafafa;
+  --bg-rgb: 250, 250, 250;
+  --bg-raise: #f0f0ef;
+  --bg-band: #f2f2f1;
+  --bg-hover: #efefed;
+  --cover-bg: #e9e9e7;
+  --cover-bg-2: #f6f6f5;
+  --fg: #111111;
+  --text: #262626;
+  --text-dim: #444444;
+  --mute: #6b6b6b;
+  --word-dim: #cfcfcf;
+  --line: #e2e2e0;
+  --line-2: #d6d6d3;
+  --line-soft: #e8e8e6;
+  --gold: #946b17;
+  --gold-hi: #8a6416;
+  --gold-lo: #d4b26a;
+  --gold-pale: #e6c879;
+  --gold-rgb: 148, 107, 23;
+  --on-gold: #ffffff;
+  --formula: rgba(22, 19, 14, .11);
+  --formula-gold: rgba(148, 107, 23, .22);
+  --shadow: rgba(0, 0, 0, .14);
+  --shadow-strong: rgba(0, 0, 0, .24);
+  --scrim-dim: rgba(0, 0, 0, .35);
+  --scrim-top: .72;
+  --scrim-mid: .84;
+  --surface-a: .86;
+  --band-video-opacity: .7;
+  --band-mid: .72;
+}
+
+/* No explicit choice: follow the system. Keep in sync with the block above. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #fafafa;
+    --bg-rgb: 250, 250, 250;
+    --bg-raise: #f0f0ef;
+    --bg-band: #f2f2f1;
+    --bg-hover: #efefed;
+    --cover-bg: #e9e9e7;
+    --cover-bg-2: #f6f6f5;
+    --fg: #111111;
+    --text: #262626;
+    --text-dim: #444444;
+    --mute: #6b6b6b;
+    --word-dim: #cfcfcf;
+    --line: #e2e2e0;
+    --line-2: #d6d6d3;
+    --line-soft: #e8e8e6;
+    --gold: #946b17;
+    --gold-hi: #8a6416;
+    --gold-lo: #d4b26a;
+    --gold-pale: #e6c879;
+    --gold-rgb: 148, 107, 23;
+    --on-gold: #ffffff;
+    --formula: rgba(22, 19, 14, .11);
+    --formula-gold: rgba(148, 107, 23, .22);
+    --shadow: rgba(0, 0, 0, .14);
+    --shadow-strong: rgba(0, 0, 0, .24);
+    --scrim-dim: rgba(0, 0, 0, .35);
+    --scrim-top: .72;
+    --scrim-mid: .84;
+    --surface-a: .86;
+    --band-video-opacity: .7;
+    --band-mid: .72;
+  }
+}
+
+
+/* Light theme: sections with a background video stay dark, so the footage keeps
+   its full strength instead of being washed out under a white overlay. */
+:root[data-theme="light"] .scene:has(> video.bg),
+:root[data-theme="light"] .band {
+  color-scheme: dark;
+  --bg: #0b0b0b;
+  --bg-rgb: 11, 11, 11;          /* for translucent scrims and card surfaces */
+  --bg-raise: #141414;           /* code blocks, drawer */
+  --bg-band: #0e0d0a;            /* marquee strip */
+  --bg-hover: #15120a;
+  --cover-bg: #1a1a1a;
+  --cover-bg-2: #0d0d0d;
+  --fg: #f5f2ea;                 /* headings, strongest text */
+  --text: #e3ded2;
+  --text-dim: #cfcabf;
+  --mute: #9b968a;
+  --word-dim: #3a3832;           /* About intro words before they light up */
+  --line: #262626;
+  --line-2: #2a2a2a;             /* card borders */
+  --line-soft: #1d1d1d;
+  --gold: #c9a24a;
+  --gold-hi: #e8c873;            /* emphasis and links */
+  --gold-lo: #8a6a25;            /* decorative borders and strokes */
+  --gold-pale: #fff3cf;          /* top of the title gradient */
+  --gold-rgb: 201, 162, 74;
+  --on-gold: #0b0b0b;
+  --formula: rgba(245, 242, 234, .15);
+  --formula-gold: rgba(232, 200, 115, .22);
+  --shadow: rgba(0, 0, 0, .45);
+  --shadow-strong: rgba(0, 0, 0, .6);
+  --scrim-dim: rgba(0, 0, 0, .55);    /* behind the notes drawer */
+  --scrim-top: .35;              /* video scene overlay opacities */
+  --scrim-mid: .5;
+  --surface-a: .72;              /* card surface opacity over video */
+  --band-video-opacity: .6;
+  --band-mid: .6;
+  color: var(--fg);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .scene:has(> video.bg),
+  :root:not([data-theme="dark"]) .band {
+  color-scheme: dark;
+  --bg: #0b0b0b;
+  --bg-rgb: 11, 11, 11;          /* for translucent scrims and card surfaces */
+  --bg-raise: #141414;           /* code blocks, drawer */
+  --bg-band: #0e0d0a;            /* marquee strip */
+  --bg-hover: #15120a;
+  --cover-bg: #1a1a1a;
+  --cover-bg-2: #0d0d0d;
+  --fg: #f5f2ea;                 /* headings, strongest text */
+  --text: #e3ded2;
+  --text-dim: #cfcabf;
+  --mute: #9b968a;
+  --word-dim: #3a3832;           /* About intro words before they light up */
+  --line: #262626;
+  --line-2: #2a2a2a;             /* card borders */
+  --line-soft: #1d1d1d;
+  --gold: #c9a24a;
+  --gold-hi: #e8c873;            /* emphasis and links */
+  --gold-lo: #8a6a25;            /* decorative borders and strokes */
+  --gold-pale: #fff3cf;          /* top of the title gradient */
+  --gold-rgb: 201, 162, 74;
+  --on-gold: #0b0b0b;
+  --formula: rgba(245, 242, 234, .15);
+  --formula-gold: rgba(232, 200, 115, .22);
+  --shadow: rgba(0, 0, 0, .45);
+  --shadow-strong: rgba(0, 0, 0, .6);
+  --scrim-dim: rgba(0, 0, 0, .55);    /* behind the notes drawer */
+  --scrim-top: .35;              /* video scene overlay opacities */
+  --scrim-mid: .5;
+  --surface-a: .72;              /* card surface opacity over video */
+  --band-video-opacity: .6;
+  --band-mid: .6;
+    color: var(--fg);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.65;
+}
+img, video { display: block; max-width: 100%; }
+a { color: var(--gold-hi); }
+a:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+ul { list-style: none; }
+
+/* ---------- labels, scene titles ---------- */
+
+.label {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.drift {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(80px, 15vw, 220px);
+  line-height: .85;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--fg);
+  white-space: nowrap;
+  will-change: transform;
+}
+.drift .fill {
+  background: linear-gradient(90deg, var(--gold-hi), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0;
+  color: transparent;
+}
+.txt { max-width: 46ch; color: var(--text); margin-top: 22px; font-size: 17px; }
+
+/* ---------- ✎ Notes badge (Reading cards, learning topics) ---------- */
+
+.notes-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: var(--gold);
+  color: var(--on-gold);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.notes-badge:hover { background: var(--gold-hi); }
+
+/* ---------- full-screen scene with optional background video ---------- */
+
+.scene {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  padding: 10vh var(--gutter);
+  overflow: hidden;
+  /* clip, not just hide: the oversized .bg video must not make the scene
+     scrollable, or scrollIntoView/focus can shift it out from under its overlay */
+  overflow: clip;
+}
+.scene > .bg {
+  position: absolute;
+  left: 0;
+  top: -15%;
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  z-index: 0;
+  background: var(--bg);
+}
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(var(--bg-rgb), var(--scrim-top)) 0%, rgba(var(--bg-rgb), var(--scrim-mid)) 45%, var(--bg) 100%);
+}
+.scene > .in { position: relative; z-index: 2; width: 100%; }
+
+/* ---------- reveal on scroll (js/shared.js reveal()) ---------- */
+
+.js .rv {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
+  transition-delay: var(--d, 0s);
+}
+.js .rv.is-in { opacity: 1; transform: none; }
+
+/* ---------- film grain, progress bar, section dots ---------- */
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 50;
+  pointer-events: none;
+  opacity: .06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1s steps(4) infinite;
+}
+@keyframes grain {
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -2%); }
+}
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  height: 2px;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--gold-lo), var(--gold-hi));
+}
+
+.dots {
+  position: fixed;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dots a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--mute);
+  font-size: 10px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+}
+.dots i { width: 7px; height: 7px; border: 1px solid var(--gold); border-radius: 50%; transition: .3s; }
+.dots span { opacity: 0; transform: translateX(6px); transition: .3s; }
+.dots a:hover span, .dots a:focus-visible span, .dots a.on span { opacity: 1; transform: none; }
+.dots a.on { color: var(--gold-hi); }
+.dots a.on i { background: var(--gold); transform: scale(1.4); }
+
+/* ---------- theme toggle (js/theme.js) ---------- */
+
+.theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 70;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--gold-lo);
+  border-radius: 50%;
+  background: rgba(var(--bg-rgb), .78);
+  color: var(--gold-hi);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: border-color .3s, color .3s;
+}
+.theme-toggle:hover { border-color: var(--gold); }
+.theme-toggle:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+.theme-toggle svg { width: 18px; height: 18px; }
+/* Show the moon in light mode (click for dark) and the sun in dark mode. */
+.theme-toggle .ic-sun { display: block; }
+.theme-toggle .ic-moon { display: none; }
+:root[data-theme="light"] .theme-toggle .ic-sun { display: none; }
+:root[data-theme="light"] .theme-toggle .ic-moon { display: block; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .theme-toggle .ic-sun { display: none; }
+  :root:not([data-theme="dark"]) .theme-toggle .ic-moon { display: block; }
+}
+
+/* Phones and touch screens: no dots, no grain (battery and jank). */
+@media (max-width: 860px), (pointer: coarse), (hover: none) {
+  .dots, .grain { display: none; }
+}
+
+/* Reduced motion: nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .rv { opacity: 1; transform: none; }
+  .grain { display: none; }
+}
+
+/* Light theme: emphasis words also get a little weight, for contrast on white. */
+:root[data-theme="light"] .lead em { font-weight: 600; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .lead em { font-weight: 600; } }
+
