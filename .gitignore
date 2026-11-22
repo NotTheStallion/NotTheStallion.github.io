@@ -1,0 +1,14 @@
+# Local planning, never published
+.wayfinder/
+.scratch/
+GLOSSARY.md
+
+# Throwaway prototypes
+prototype-*.html
+assets/prototype/
+
+# OS and editor clutter
+.DS_Store
+.vscode/
+.idea/
+node_modules/
