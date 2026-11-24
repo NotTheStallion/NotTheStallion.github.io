@@ -1,4 +1,6 @@
 [
+  { "title": "The Psychology of Money", "author": "Morgan Housel", "shelf": "reading", "isbn": "9780857197689" },
+
   { "title": "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow", "author": "Aurélien Géron", "shelf": "read", "isbn": "9781098125974" },
 
   { "title": "Introduction to Probability", "author": "Joseph K. Blitzstein & Jessica Hwang", "shelf": "want", "isbn": "9781466575578" },
@@ -9,7 +11,6 @@
   { "title": "All of Statistics", "author": "Larry Wasserman", "shelf": "want", "isbn": "9780387402727" },
   { "title": "Never Eat Alone", "author": "Keith Ferrazzi", "shelf": "want", "isbn": "9780385512053" },
   { "title": "Never Split the Difference", "author": "Chris Voss", "shelf": "want", "isbn": "9780062407801" },
-  { "title": "The Psychology of Money", "author": "Morgan Housel", "shelf": "want", "isbn": "9780857197689" },
   { "title": "The Intelligent Investor", "author": "Benjamin Graham", "shelf": "want", "isbn": "9780060771041" },
   { "title": "The Hard Thing About Hard Things", "author": "Ben Horowitz", "shelf": "want", "isbn": "9780062273208" },
   { "title": "Zero to One", "author": "Peter Thiel", "shelf": "want", "isbn": "9780804139298" }
